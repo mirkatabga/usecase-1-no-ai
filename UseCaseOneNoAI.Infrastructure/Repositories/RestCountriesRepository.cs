@@ -31,11 +31,22 @@ namespace UseCaseOneNoAI.Infrastructure.Repositories
             countries = FilterByName(countries, name);
             countries = FilterByPopulation(countries, maxPopulationInMil);
             countries = OrderByName(countries, sortType);
+            countries = Take(countries, take);
 
             return _mapper.Map<IEnumerable<CountryEntity>>(countries);
         }
 
-        private IEnumerable<CountryDataModel> OrderByName(IEnumerable<CountryDataModel> countries, SortType sortType)
+        private static IEnumerable<CountryDataModel> Take(IEnumerable<CountryDataModel> countries, int? take)
+        {
+            if (take is null)
+            {
+                return countries;
+            }
+
+            return countries.Take(take.Value);
+        }
+
+        private static IEnumerable<CountryDataModel> OrderByName(IEnumerable<CountryDataModel> countries, SortType sortType)
         {
             return sortType switch
             {
@@ -46,7 +57,7 @@ namespace UseCaseOneNoAI.Infrastructure.Repositories
             };
         }
 
-        private IEnumerable<CountryDataModel> FilterByPopulation(IEnumerable<CountryDataModel> countries, double? maxPopulationInMil)
+        private static IEnumerable<CountryDataModel> FilterByPopulation(IEnumerable<CountryDataModel> countries, double? maxPopulationInMil)
         {
             if (!maxPopulationInMil.HasValue)
             {

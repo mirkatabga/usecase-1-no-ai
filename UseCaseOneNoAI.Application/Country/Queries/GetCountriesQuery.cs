@@ -38,7 +38,7 @@ public class GetCountriesQueryHandler : IRequestHandler<GetCountriesQuery, IEnum
         return _mapper.Map<IEnumerable<Country>>(countries);
     }
 
-    private SortType ParseSortType(string? sortTypeValue)
+    private static SortType ParseSortType(string? sortTypeValue)
     {
         if (string.IsNullOrWhiteSpace(sortTypeValue))
         {
