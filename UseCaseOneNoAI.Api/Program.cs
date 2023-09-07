@@ -21,10 +21,10 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.MapGet("/api/v1/countries", async (string? name, double? maxPopulationInMil, bool? ascending, int? take) =>
+app.MapGet("/api/v1/countries", async (string? name, double? maxPopulationInMil, string? sortType, int? take) =>
 {
     var sender = app.Services.GetRequiredService<ISender>();
-    var query = new GetCountriesQuery(name, maxPopulationInMil, ascending, take);
+    var query = new GetCountriesQuery(name, maxPopulationInMil, sortType, take);
     var countries = await sender.Send(query);
 
     return countries;

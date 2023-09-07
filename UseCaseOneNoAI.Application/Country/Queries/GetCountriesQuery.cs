@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using MediatR;
+using System.ComponentModel.DataAnnotations;
 using UseCaseOneNoAI.Application.Resources;
+using UseCaseOneNoAI.Domain.Enums;
 using UseCaseOneNoAI.Domain.Repositories;
 
 namespace UseCaseOneNoAI.Application.Queries;
@@ -8,7 +10,7 @@ namespace UseCaseOneNoAI.Application.Queries;
 public record GetCountriesQuery(
     string? Name,
     double? MaxPopulationInMil,
-    bool? Ascending,
+    string? SortType,
     int? Take) : IRequest<IEnumerable<Country>>;
 
 public class GetCountriesQueryHandler : IRequestHandler<GetCountriesQuery, IEnumerable<Country>>
@@ -29,10 +31,25 @@ public class GetCountriesQueryHandler : IRequestHandler<GetCountriesQuery, IEnum
         var countries = await _countryRepository.GetCountriesAsync(
             request.Name,
             request.MaxPopulationInMil,
-            request.Ascending,
+            ParseSortType(request.SortType),
             request.Take,
             cancellationToken);
 
         return _mapper.Map<IEnumerable<Country>>(countries);
+    }
+
+    private SortType ParseSortType(string? sortTypeValue)
+    {
+        if (string.IsNullOrWhiteSpace(sortTypeValue))
+        {
+            return SortType.None;
+        }
+
+        if (!Enum.TryParse(sortTypeValue, true, out SortType sortType))
+        {
+            throw new ValidationException($"Invalid value for {nameof(sortType)}");
+        }
+
+        return sortType;
     }
 }
