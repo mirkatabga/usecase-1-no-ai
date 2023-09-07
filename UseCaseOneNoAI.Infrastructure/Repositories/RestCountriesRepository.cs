@@ -1,23 +1,21 @@
 ﻿using AutoMapper;
-using System.Net.Http.Json;
-using System.Text.Json;
 using UseCaseOneNoAI.Domain.Entities;
-using UseCaseOneNoAI.Domain.Exceptions;
 using UseCaseOneNoAI.Domain.Repositories;
+using UseCaseOneNoAI.Infrastructure.Clients;
 using UseCaseOneNoAI.Infrastructure.Models;
 
 namespace UseCaseOneNoAI.Infrastructure.Repositories
 {
     internal class RestCountriesRepository : ICountryRepository
     {
-        private readonly HttpClient _httpClient;
+        private readonly ICountryClient _client;
         private readonly IMapper _mapper;
 
         public RestCountriesRepository(
-            IHttpClientFactory httpClientFactory,
+            ICountryClient countryClient,
             IMapper mapper)
         {
-            _httpClient = httpClientFactory.CreateClient(nameof(ICountryRepository));
+            _client = countryClient;
             _mapper = mapper;
         }
 
@@ -28,20 +26,21 @@ namespace UseCaseOneNoAI.Infrastructure.Repositories
             int? take = null,
             CancellationToken cancellationToken = new CancellationToken())
         {
-            var response = await _httpClient.GetAsync("/v3.1/all", cancellationToken);
+            var countries = await _client.GetCountries(name, cancellationToken);
+            var filtered = FilterByName(countries, name);
 
-            if (!response.IsSuccessStatusCode)
+            return _mapper.Map<IEnumerable<CountryEntity>>(filtered);
+        }
+
+        private static IEnumerable<CountryDataModel> FilterByName(IEnumerable<CountryDataModel> countries, string? name)
+        {
+            if (string.IsNullOrWhiteSpace(name))
             {
-                var reason = await response.Content.ReadAsStringAsync(cancellationToken);
-                throw new DomainException($"Could not retrive countries. Reason: {reason}");
+                return countries;
             }
 
-            var jsonOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-
-            var countries = await response.Content.ReadFromJsonAsync<IEnumerable<CountryDataModel>>(
-                jsonOptions, cancellationToken);
-
-            return _mapper.Map<IEnumerable<CountryEntity>>(countries);
+            return countries
+                .Where(c => c.Name?.Common?.ToLowerInvariant()?.Contains(name.ToLowerInvariant()) == true);
         }
     }
 }
