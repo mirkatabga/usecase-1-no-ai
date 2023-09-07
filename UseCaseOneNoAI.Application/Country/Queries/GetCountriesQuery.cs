@@ -7,7 +7,7 @@ namespace UseCaseOneNoAI.Application.Queries;
 
 public record GetCountriesQuery(
     string? Name,
-    int? MaxPopulation,
+    double? MaxPopulationInMil,
     bool? Ascending,
     int? Take) : IRequest<IEnumerable<Country>>;
 
@@ -28,7 +28,7 @@ public class GetCountriesQueryHandler : IRequestHandler<GetCountriesQuery, IEnum
     {
         var countries = await _countryRepository.GetCountriesAsync(
             request.Name,
-            request.MaxPopulation,
+            request.MaxPopulationInMil,
             request.Ascending,
             request.Take,
             cancellationToken);

@@ -6,7 +6,7 @@ namespace UseCaseOneNoAI.Domain.Repositories
     {
         Task<IEnumerable<CountryEntity>> GetCountriesAsync(
             string? name = null,
-            int? maxPopulation = null,
+            double? maxPopulationInMil = null,
             bool? ascending = null,
             int? take = null,
             CancellationToken cancellationToken = new CancellationToken());
