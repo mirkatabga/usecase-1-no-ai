@@ -4,6 +4,6 @@ namespace UseCaseOneNoAI.Infrastructure.Clients
 {
     internal interface ICountryClient
     {
-        Task<IEnumerable<CountryDataModel>> GetCountries(string? name, CancellationToken cancellationToken);
+        Task<IEnumerable<CountryDataModel>> GetCountriesAsync(CancellationToken cancellationToken);
     }
 }

@@ -1,6 +1,6 @@
 using MediatR;
 using UseCaseOneNoAI.Application;
-using UseCaseOneNoAI.Application.Queries;
+using UseCaseOneNoAI.Application.Countries.Queries;
 using UseCaseOneNoAI.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);

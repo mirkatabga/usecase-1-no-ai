@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using UseCaseOneNoAI.Application.Queries;
+using UseCaseOneNoAI.Application.Countries.Queries;
 
 namespace UseCaseOneNoAI.Application
 {

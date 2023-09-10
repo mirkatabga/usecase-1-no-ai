@@ -7,12 +7,12 @@ using UseCaseOneNoAI.Infrastructure.Models;
 
 namespace UseCaseOneNoAI.Infrastructure.Repositories
 {
-    internal class RestCountriesRepository : ICountryRepository
+    internal class RestCountryRepository : ICountryRepository
     {
         private readonly ICountryClient _client;
         private readonly IMapper _mapper;
 
-        public RestCountriesRepository(
+        public RestCountryRepository(
             ICountryClient countryClient,
             IMapper mapper)
         {
@@ -27,7 +27,7 @@ namespace UseCaseOneNoAI.Infrastructure.Repositories
             int? take = null,
             CancellationToken cancellationToken = new CancellationToken())
         {
-            var countries = await _client.GetCountries(name, cancellationToken);
+            var countries = await _client.GetCountriesAsync(cancellationToken);
             countries = FilterByName(countries, name);
             countries = FilterByPopulation(countries, maxPopulationInMil);
             countries = OrderByName(countries, sortType);

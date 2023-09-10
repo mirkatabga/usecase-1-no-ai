@@ -6,13 +6,13 @@ using UseCaseOneNoAI.Infrastructure.Models;
 
 namespace UseCaseOneNoAI.Infrastructure.Clients
 {
-    internal class RestCountriesClient : ICountryClient
+    internal class RestCountryClient : ICountryClient
     {
         private const string ALL_COUNTRIES_KEY = "ALL_COUNTRIES";
         private readonly HttpClient _httpClient;
         private readonly IDistributedCache _cache;
 
-        public RestCountriesClient(
+        public RestCountryClient(
             IHttpClientFactory httpClientFactory,
             IDistributedCache cache)
         {
@@ -20,7 +20,7 @@ namespace UseCaseOneNoAI.Infrastructure.Clients
             _cache = cache;
         }
 
-        public async Task<IEnumerable<CountryDataModel>> GetCountries(string? name, CancellationToken cancellationToken)
+        public async Task<IEnumerable<CountryDataModel>> GetCountriesAsync(CancellationToken cancellationToken)
         {
             var cachedCountries = await GetCached(cancellationToken);
 

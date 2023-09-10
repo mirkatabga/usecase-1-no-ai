@@ -5,8 +5,7 @@ using UseCaseOneNoAI.Application.Resources;
 using UseCaseOneNoAI.Domain.Enums;
 using UseCaseOneNoAI.Domain.Repositories;
 
-namespace UseCaseOneNoAI.Application.Queries;
-
+namespace UseCaseOneNoAI.Application.Countries.Queries;
 public record GetCountriesQuery(
     string? Name,
     double? MaxPopulationInMil,

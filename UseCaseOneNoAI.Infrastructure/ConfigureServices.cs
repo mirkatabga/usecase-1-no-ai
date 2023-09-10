@@ -10,14 +10,14 @@ namespace UseCaseOneNoAI.Infrastructure
     {
         public static void AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddHttpClient<ICountryClient, RestCountriesClient>(opt =>
+            services.AddHttpClient<ICountryClient, RestCountryClient>(opt =>
             {
                 var baseUrl = configuration["Infrastructure:CountriesProvider:BaseUrl"]!;
                 opt.BaseAddress = new Uri(baseUrl);
             });
 
-            services.AddTransient<ICountryClient, RestCountriesClient>();
-            services.AddTransient<ICountryRepository, RestCountriesRepository>();
+            services.AddTransient<ICountryClient, RestCountryClient>();
+            services.AddTransient<ICountryRepository, RestCountryRepository>();
             services.AddAutoMapper(typeof(ConfigureServices).Assembly);
         }
     }
